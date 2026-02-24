@@ -1,14 +1,24 @@
-export PATH="./bin:/usr/local/bin:/usr/local/sbin:$ZSH/bin:$PATH"
+# Homebrew - supports both Apple Silicon (/opt/homebrew) and Intel (/usr/local)
+if [[ -d /opt/homebrew ]]; then
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+elif [[ -d /usr/local/Homebrew ]]; then
+    export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+fi
+
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 
+# Project-local and personal bins
+export PATH="./bin:$HOME/.local/bin:$PATH"
+
 # Android SDK
-export ANDROID_HOME=/Users/$USER/Library/Android/sdk
-export PATH=$ANDROID_HOME/platform-tools:$PATH
-export PATH=$ANDROID_HOME/tools:$PATH
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH"
+
 # Flutter
-export PATH=/Users/$USER/Developer/flutter/bin:$PATH
-export PATH=/Users/$USER/Developer/flutter/.pub-cache/bin:$PATH
-export PATH=/Users/$USER/Developer/flutter/bin/cache/dart-sdk/bin:$PATH
-export PATH="$PATH":"$HOME/.pub-cache/bin"
-# FVM
-export PATH=/Users/$USER/fvm/default/bin:$PATH
+export PATH="$HOME/development/flutter/bin:$HOME/development/flutter/.pub-cache/bin:$HOME/development/flutter/bin/cache/dart-sdk/bin:$HOME/.pub-cache/bin:$PATH"
+
+# FVM (Flutter Version Manager)
+export PATH="$HOME/fvm/default/bin:$PATH"
+
+# Rancher Desktop
+[[ -d "$HOME/.rd/bin" ]] && export PATH="$HOME/.rd/bin:$PATH"

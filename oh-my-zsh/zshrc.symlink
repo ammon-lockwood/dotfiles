@@ -4,9 +4,6 @@ export ZSH="/Users/$USER/.oh-my-zsh"
 # Disable the completion check on insecure system folders
 ZSH_DISABLE_COMPFIX=true
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="agnoster"
 DEFAULT_USER=`whoami`
@@ -17,14 +14,17 @@ source $ZSH/oh-my-zsh.sh
 export DOTFILES=$HOME/.dotfiles
 
 # all of our path files
-for file in $(find $DOTFILES -name 'path.sh'); 
-do
-    source $file
+for file in $DOTFILES/**/path.sh(N); do
+    source "$file"
 done
 
-# Does what you wanted to do when you mispell a command
-if type thefuck > /dev/null; then
-    eval "$(thefuck --alias)"
+# Does what you wanted to do when you misspell a command (lazy-loaded for faster startup)
+if command -v thefuck &>/dev/null; then
+    fuck() {
+        unfunction fuck
+        eval "$(thefuck --alias)"
+        fuck "$@"
+    }
 fi
 
 # load zgen
@@ -52,15 +52,13 @@ fi
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
 # you'll have access to them in your scripts.
-if [[ -a ~/.localrc ]]
-then
-  source ~/.localrc
+if [[ -a ~/.localrc ]]; then
+    source ~/.localrc
 fi
 
 # all of our alias files
-for file in $(find $DOTFILES -name 'aliases.sh'); 
-do
-    source $file
+for file in $DOTFILES/**/aliases.sh(N); do
+    source "$file"
 done
 
 # Better history
@@ -72,13 +70,14 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
-# for Homebrew installed rbenv
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+# for Homebrew installed rbenv (lazy-loaded for faster startup)
+if command -v rbenv &>/dev/null; then
+    rbenv() {
+        unfunction rbenv
+        eval "$(command rbenv init - zsh)"
+        rbenv "$@"
+    }
+fi
 
 # set environment variables for GPG (needed to sign git commits)
 export GPG_TTY=$(tty)
-
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
