@@ -11,3 +11,6 @@ fi
 
 alias nav="cd ~/nav"
 alias dotfiles="cd ~/.dotfiles"
+alias notes="code ~/nav/notes/."
+alias macmini="ssh ammon@10.0.0.44"
+alias macpro="ssh ammon@10.0.0.13"

@@ -14,18 +14,14 @@ source $ZSH/oh-my-zsh.sh
 export DOTFILES=$HOME/.dotfiles
 
 # all of our path files
-for file in $DOTFILES/**/path.sh(N); do
-    source "$file"
-done
+for file in $DOTFILES/**/path.sh(N); do source $file; done
 
-# Does what you wanted to do when you misspell a command (lazy-loaded for faster startup)
-if command -v thefuck &>/dev/null; then
-    fuck() {
-        unfunction fuck
-        eval "$(thefuck --alias)"
-        fuck "$@"
-    }
-fi
+# Lazy-load thefuck (speeds up shell startup)
+fuck() {
+  unset -f fuck
+  eval "$(thefuck --alias)"
+  fuck "$@"
+}
 
 # load zgen
 source "${HOME}/.zgen/zgen.zsh"
@@ -57,9 +53,7 @@ if [[ -a ~/.localrc ]]; then
 fi
 
 # all of our alias files
-for file in $DOTFILES/**/aliases.sh(N); do
-    source "$file"
-done
+for file in $DOTFILES/**/aliases.sh(N); do source $file; done
 
 # Better history
 # Credits to https://coderwall.com/p/jpj_6q/zsh-better-history-searching-with-arrow-keys
@@ -70,14 +64,83 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
-# for Homebrew installed rbenv (lazy-loaded for faster startup)
-if command -v rbenv &>/dev/null; then
-    rbenv() {
-        unfunction rbenv
-        eval "$(command rbenv init - zsh)"
-        rbenv "$@"
-    }
-fi
+# Lazy-load rbenv (speeds up shell startup)
+rbenv() {
+  unset -f rbenv
+  eval "$(command rbenv init -)"
+  rbenv "$@"
+}
 
 # set environment variables for GPG (needed to sign git commits)
 export GPG_TTY=$(tty)
+
+
+# Lazy-load NVM (speeds up shell startup significantly)
+export NVM_DIR="$HOME/.nvm"
+nvm() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+node() { nvm use default > /dev/null; unset -f node; node "$@"; }
+npm() { nvm use default > /dev/null; unset -f npm; npm "$@"; }
+npx() { nvm use default > /dev/null; unset -f npx; npx "$@"; }
+
+# Java JDK for M1 and Flamingo android studio
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/ammon/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+## [Completion] 
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /Users/ammon/.dart-cli-completion/zsh-config.zsh ]] && . /Users/ammon/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+# asdf for elixir and erlang
+. "$HOME/.asdf/asdf.sh"
+
+# added by Snowflake SnowSQL installer v1.2
+export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH
+
+# Go Setup
+export GO111MODULE=on
+export GOPRIVATE=github.com/nav-inc
+
+# pnpm
+export PNPM_HOME="/Users/ammon/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+# linkerd support
+export PATH=$HOME/.linkerd2/bin:$PATH
+
+# FVM
+export PATH="/Users/ammon/.fvm_flutter/bin:$PATH"
+
+# NAV AWS GITHUB - call nav-aws-login manually when needed
+export ECR_REGISTRY=409423256080.dkr.ecr.us-west-2.amazonaws.com
+nav-aws-login() {
+  if ! PAGER='' aws sts get-caller-identity --profile ALOCKWOOD_PROFILE > /dev/null 2>&1; then
+    aws sso login --profile ALOCKWOOD_PROFILE
+  fi
+  eval $(aws configure export-credentials --profile ALOCKWOOD_PROFILE --format env)
+  aws ecr get-login-password --profile ALOCKWOOD_PROFILE | docker login --username AWS --password-stdin $ECR_REGISTRY
+}
+
+# nav typescript
+export GITHUB_CREDENTIALS=$(gh auth token)
+
+export PATH="$HOME/.local/bin:$PATH"
+
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/ammon/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ammon/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/ammon/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ammon/google-cloud-sdk/completion.zsh.inc'; fi
