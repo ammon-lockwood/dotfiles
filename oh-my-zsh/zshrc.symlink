@@ -92,25 +92,19 @@ export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/ammon/.rd/bin:$PATH"
+export PATH="$HOME/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 ## [Completion] 
 ## Completion scripts setup. Remove the following line to uninstall
-[[ -f /Users/ammon/.dart-cli-completion/zsh-config.zsh ]] && . /Users/ammon/.dart-cli-completion/zsh-config.zsh || true
+[[ -f $HOME/.dart-cli-completion/zsh-config.zsh ]] && . $HOME/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
-
-# asdf for elixir and erlang
-. "$HOME/.asdf/asdf.sh"
-
-# added by Snowflake SnowSQL installer v1.2
-export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH
 
 # Go Setup
 export GO111MODULE=on
 export GOPRIVATE=github.com/nav-inc
 
 # pnpm
-export PNPM_HOME="/Users/ammon/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -121,7 +115,7 @@ esac
 export PATH=$HOME/.linkerd2/bin:$PATH
 
 # FVM
-export PATH="/Users/ammon/.fvm_flutter/bin:$PATH"
+export PATH="$HOME/.fvm_flutter/bin:$PATH"
 
 # NAV AWS GITHUB - call nav-aws-login manually when needed
 export ECR_REGISTRY=409423256080.dkr.ecr.us-west-2.amazonaws.com
@@ -140,7 +134,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/ammon/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ammon/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/ammon/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ammon/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
